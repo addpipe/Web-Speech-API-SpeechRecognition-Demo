@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-us">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -12,10 +12,7 @@
     <div>
       <h1>Web Speech API Speech Recognition Demo</h1>
       <p>
-        <small
-          >Made by the
-          <a href="https://addpipe.com">Pipe Recording Platform</a></small
-        >
+        <small>Made by the <a href="https://addpipe.com">Pipe Recording Platform</a></small>
       </p>
       <p>
         This Web Speech API Speech Recognition Demo uses
@@ -37,8 +34,7 @@
           target="_blank"
           rel="noopener noreferrer"
           >SpeechRecognition interface</a
-        >. It uses the following main
-        <strong>SpeechRecognition</strong> properties:
+        >. It uses the following main <strong>SpeechRecognition</strong> properties:
         <a
           href="https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition/continuous"
           target="_blank"
@@ -60,27 +56,24 @@
         >.
       </p>
       <h2 style="margin-bottom: 0">How to use:</h2>
-      <ul style="margin-top: 0">
-        <li>Grant camera + microphone permissions</li>
-        <li>Select a language (default is english)</li>
+      <ol style="margin-top: 0">
+        <li>Grant camera + microphone permissions.<br/>On Safari, you also need grant access to Speech Recognition by enabling Siri or Dictation in System Preferences or Settings.</li>
+        <li>Select a language (Default is english. Auto detection is also available)</li>
         <li>Start a recording</li>
         <li>Speak in the chosen language a few times</li>
         <li>Stop the recording</li>
-      </ul>
+      </ol>
       <h2 style="margin-bottom: 0">Features:</h2>
       <ul style="margin-top: 0">
         <li>Real-time captions while recording</li>
         <li>Multi-language captions</li>
-        <li>
-          Generated <code>.rtt</code>, <code>.srt</code> and
-          <code>.JSON</code> files with the resulted transcription after a
-          recording stops
-        </li>
+        <li>Generated <code>.rtt</code>, <code>.srt</code> and <code>.JSON</code> files with the resulted transcription after a recording stops</li>
         <li>Subtitle file generated and applied for the video playback</li>
       </ul>
       <span>
-        Transcribe in:
-        <select id="languageSelect">
+        <label for="languageSelect">Language</label>
+        <select name="languageSelect" id="languageSelect">
+          <option value="auto">Auto</option>
           <option value="af-ZA">Afrikaans</option>
           <option value="am-ET">አማርኛ</option>
           <option value="az-AZ">Azərbaycanca</option>
@@ -191,9 +184,13 @@
             <p class="subtitle-line"></p>
           </div>
         </div>
-        <div id="controls">
-          <button id="rec" onclick="onBtnRecordClicked()">Record</button>
-          <button id="stop" onclick="onBtnStopClicked()" disabled>Stop</button>
+        <div>
+          <label for="audioDevices">Microphone</label>
+          <select name="audioDevices" style="display: none;" class="button" id="audioDevices"></select>
+        </div>
+        <div class="controls">
+          <button class="button" id="rec" onclick="onBtnRecordClicked()">Record</button>
+          <button class="button" id="stop" onclick="onBtnStopClicked()" disabled>Stop</button>
         </div>
       </div>
       <a
@@ -202,14 +199,14 @@
         name="mediarecorder.webm"
         href
       ></a>
-      <div id="controls">
-        <button style="display: none" id="downloadVTT">
+      <div class="controls">
+        <button class="button" style="display: none" id="downloadVTT">
           Download VTT captions file
         </button>
-        <button style="display: none" id="downloadSRT">
+        <button class="button" style="display: none" id="downloadSRT">
           Download SRT captions file
         </button>
-        <button style="display: none" id="downloadJSON">
+        <button class="button" style="display: none" id="downloadJSON">
           Download JSON captions file
         </button>
       </div>
@@ -227,13 +224,12 @@
     <ul>
       <li>No support for Firefox and Opera yet</li>
       <li>Only works when connected to a network</li>
-      <li>
-        It takes a few extra seconds for the Speech Recognition API to figure
-        out when a non-english sentence ends
-      </li>
+      <li>It takes a few extra seconds for the Speech Recognition API to figure out when a non-english sentence ends</li>
     </ul>
     <h2>Links:</h2>
     <ul>
+      <li><a href="https://addpipe.com/web-speech-api-text-to-speech-demo/" target="_blank" rel="noopener noreferrer">Web Speech API Text-to-Speech (Speech Synthesis) Demo</a></li>
+      <li><a href="https://blog.addpipe.com/a-deep-dive-into-the-web-speech-api/" target="_blank" rel="noopener noreferrer">Web Speech API Article</a></li>
       <li>
         <a
           target="_blank"

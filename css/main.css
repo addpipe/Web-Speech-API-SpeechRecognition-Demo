@@ -86,13 +86,13 @@ video {
   height: 360px;
 }
 
-#controls {
+.controls {
   display: flex;
   margin-top: 2rem;
   max-width: 28em;
 }
 
-button {
+.button {
   flex-grow: 1;
   height: 3rem;
   min-width: 10rem;
@@ -109,23 +109,23 @@ button {
   font-weight: bold;
   font-size: 1rem;
 }
-button:hover,
-button:focus {
+.button:hover,
+.button:focus {
   outline: none;
   background: #c72d1c;
 }
-button::-moz-focus-inner {
+.button::-moz-focus-inner {
   border: 0;
 }
-button:active {
+.button:active {
   box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2);
   line-height: 3rem;
 }
-button:disabled {
+.button:disabled {
   pointer-events: none;
   background: lightgray;
 }
-button:first-child {
+.button:first-child {
   margin-left: 0;
 }
 

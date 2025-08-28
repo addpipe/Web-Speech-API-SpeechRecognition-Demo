@@ -34,10 +34,36 @@ const languageSelect = document.getElementById("languageSelect");
 const transcriptionText = document.getElementById("transcriptionText");
 const subtitles = document.getElementById("subtitles");
 const subtitleLines = document.querySelectorAll(".subtitle-line");
+const audioDeviceSelect = document.getElementById("audioDevices");
+let audioDevices = [];
+
+const changeMicrophone = async (deviceId) => {
+  const newConstraints = { ...constraints, audio: { deviceId: { exact: deviceId } } };
+  stream = await navigator.mediaDevices.getUserMedia(newConstraints);
+  video.srcObject = stream;
+}
 
 async function init() {
   stream = await navigator.mediaDevices.getUserMedia(constraints);
   video.srcObject = stream;
+  const availableDevices = await navigator.mediaDevices.enumerateDevices();
+  audioDevices = availableDevices.filter(device => device.kind === "audioinput");
+  if (audioDevices.length > 0) {
+    const currentAudioDeviceLabel = stream.getAudioTracks()[0].label;
+    audioDevices.forEach(device => {
+      const option = document.createElement("option");
+      option.value = device.deviceId;
+      option.innerText = device.label;
+      if (currentAudioDeviceLabel === device.label) {
+        option.setAttribute('selected', true);
+      }
+      audioDeviceSelect.appendChild(option);
+    })
+    audioDeviceSelect.style.display = "flex";
+    audioDeviceSelect.addEventListener("change", (e) => {
+      changeMicrophone(e.target.value);
+    })
+  }
 }
 
 function clearSubtitles() {
@@ -89,6 +115,7 @@ function onBtnRecordClicked() {
   mediaRecorder.start();
 
   recButton.disabled = true;
+  audioDeviceSelect.disabled = true;
   stopButton.disabled = false;
   // transcribeButton.disabled = false;
   transcriptionText.innerHTML = "";
@@ -105,6 +132,7 @@ function onBtnStopClicked() {
   mediaRecorder.stop();
 
   recButton.disabled = false;
+  audioDeviceSelect.disabled = false;
   stopButton.disabled = true;
 
   speechRecognitionTranscription.recordingId = name;
