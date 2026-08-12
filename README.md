@@ -8,11 +8,12 @@ It uses the following main `SpeechRecognition` properties:
 - `lang`
 
 ## How to use
-1. Grant camera + microphone permissions
-1. Select a language (default is english)
-1. Start a recording
-1. Speak in the chosen language a few times
-1. Stop the recording
+1. Grant camera and microphone permissions.
+2. Safari on macOS: When prompted, allow OS level Speech Recognition access. You can change this later from System Settings. In some cases, you may also need to enable Siri or Dictation.
+3. Select a language. English is selected by default, or you can use automatic language detection.
+4. Start recording.
+5. Speak in your selected language.
+6. Stop recording.
 
 ## Main features
 - Real-time captions while recording
