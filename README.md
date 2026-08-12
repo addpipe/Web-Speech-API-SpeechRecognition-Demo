@@ -26,11 +26,12 @@ It uses the following main `SpeechRecognition` properties:
 - Edge 79+
 - Safari 14.1+ on macOS
 - Safari on iOS 14.5+
+- Opera 123+
 
 ## Known issues
-- No support for Firefox and Opera yet
-- Only works when connected to a network
-- It takes a few extra seconds for the Speech Recognition API to figure out when a non-english sentence ends
+- Firefox does not yet support it
+- Getting it to work offline will be gimmicky. [Chrome 139](https://developer.chrome.com/release-notes/139#on-device_web_speech_api) allows it and, in our testing, in Safari it only worked offline with English
+- It takes a few extra seconds for the Speech Recognition API to figure out when a non-English sentence ends
 
 ## Resources & Links
 - [In-depth article](https://blog.addpipe.com/a-deep-dive-into-the-web-speech-api/)
