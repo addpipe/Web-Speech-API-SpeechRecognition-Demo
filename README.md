@@ -56,4 +56,4 @@ clipboard, which makes it useful when reporting a browser bug.
 - [In-depth article](https://blog.addpipe.com/a-deep-dive-into-the-web-speech-api/)
 - [Separate text-to-speech demo](https://addpipe.com/tech-demos/web-speech-api-text-to-speech-demo/)
 - [MDN: SpeechSynthesis API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis)
-- [A Quick Look at Apple's SpeechAnalyzer API](http://blog.addpipe.com/apple-speechanalyzer-api-2/)
+- [A Quick Look at Apple's SpeechAnalyzer API](http://blog.addpipe.com/apple-speechanalyzer-api/)
