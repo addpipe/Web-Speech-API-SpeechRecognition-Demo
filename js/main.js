@@ -60,6 +60,7 @@ const statErrors = document.getElementById("statErrors");
 
 const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
 const MAX_LOG_ROWS = 500;
+const UNSPECIFIED_LANGUAGE = "unspecified";
 /** Shortest a caption cue may be, and the longest that floor is allowed to grow to. */
 const MIN_CUE_SECONDS = 0.8;
 const MAX_MIN_CUE_SECONDS = 7;
@@ -598,7 +599,7 @@ function startRecording() {
   stoppingIntentionally = false;
 
   transcription.recordingId = "";
-  transcription.lang = resolvedLanguage() || "(browser default)";
+  transcription.lang = resolvedLanguage() || `unspecified (document default: ${browserFallbackLanguage()})`;
   transcription.processedLocally = false;
   transcription.results = [];
 
@@ -701,7 +702,7 @@ function handleRecordingStop() {
     trackElement.id = "playbackSubtitle";
     trackElement.label = "Generated captions";
     trackElement.kind = "subtitles";
-    trackElement.srclang = (resolvedLanguage() || "en-US").split("-")[0];
+    trackElement.srclang = (resolvedLanguage() || browserFallbackLanguage()).split("-")[0];
     trackElement.src = subtitleObjectUrl;
     trackElement.default = true;
     video.appendChild(trackElement);
@@ -738,10 +739,19 @@ const RECOGNITION_ERRORS = {
   "phrases-not-supported": "Phrase biasing is not supported for this configuration (it usually requires on-device mode).",
 };
 
-/** "auto" means: don't set lang, let the browser fall back to the document/UA language. */
+/**
+ * "unspecified" means: leave recognition.lang alone, so the browser falls back to the
+ * document/UA language. The Web Speech API has no auto-detection, which is why the option
+ * is not called "Auto".
+ */
 function resolvedLanguage() {
   const value = languageSelect.value;
-  return value === "auto" ? "" : value;
+  return value === UNSPECIFIED_LANGUAGE ? "" : value;
+}
+
+/** The tag the browser will use when recognition.lang is never assigned. */
+function browserFallbackLanguage() {
+  return document.documentElement.lang || navigator.language || "en-US";
 }
 
 function applyPhrases(rec) {
@@ -776,7 +786,7 @@ function createRecognition() {
   if (lang) {
     rec.lang = lang;
   } else {
-    log("info", `Language left unset — the browser will use "${document.documentElement.lang || navigator.language}"`);
+    log("info", `recognition.lang left unset — the browser will use "${browserFallbackLanguage()}"`);
   }
 
   if (processLocallyCheckbox.checked && "processLocally" in rec) {
@@ -1238,7 +1248,7 @@ async function refreshLocalAvailability() {
     return;
   }
 
-  const lang = resolvedLanguage() || navigator.language || "en-US";
+  const lang = resolvedLanguage() || browserFallbackLanguage();
   localModeStatus.textContent = "Checking on-device availability…";
 
   try {
@@ -1278,12 +1288,20 @@ processLocallyCheckbox.addEventListener("change", () => {
   log("info", `On-device mode ${processLocallyCheckbox.checked ? "requested" : "disabled"}`);
 });
 
+/** Spell out the tag the browser would fall back to, right in the option label. */
+function labelUnspecifiedOption() {
+  const option = languageSelect.querySelector(`option[value="${UNSPECIFIED_LANGUAGE}"]`);
+  if (option) {
+    option.textContent = `Unspecified — defaults to the browser language: ${browserFallbackLanguage()}`;
+  }
+}
+
 languageSelect.addEventListener("change", () => {
   const lang = resolvedLanguage();
   languageHint.textContent = lang
     ? `Recognition language tag: ${lang}`
-    : `No lang set — the browser falls back to "${document.documentElement.lang || navigator.language}". There is no true auto-detection in the Web Speech API.`;
-  log("info", `Language set to ${lang || "(browser default)"}`);
+    : `recognition.lang is left unset, so the browser falls back to "${browserFallbackLanguage()}". The Web Speech API has no language auto-detection.`;
+  log("info", `Language set to ${lang || `unspecified (browser default: ${browserFallbackLanguage()})`}`);
   refreshLocalAvailability();
 });
 
@@ -1293,6 +1311,7 @@ languageSelect.addEventListener("change", () => {
 
 async function init() {
   renderSupportTable();
+  labelUnspecifiedOption();
   languageSelect.dispatchEvent(new Event("change"));
 
   phrasesRow.classList.toggle("is-hidden", !("SpeechRecognitionPhrase" in window));

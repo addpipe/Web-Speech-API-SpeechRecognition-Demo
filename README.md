@@ -49,7 +49,8 @@ clipboard, which makes it useful when reporting a browser bug.
 - Chrome ends a recognition session on its own after a stretch of silence even with `continuous = true`. The demo restarts it automatically, offsets the result indices so nothing is overwritten, and counts the restarts
 - The API exposes no per-word timestamps, so caption cues are timed from the page clock and are approximate. Because two results can claim nearly the same instant, colliding cues are resolved by delaying the later one rather than truncating the earlier one
 - The n-best list is not reliably ordered. Chrome has been observed returning a 1%-confidence alternative at index 0 ahead of a 91% one, so the demo ranks final results by reported confidence instead of trusting the position, and flags the swap in the log and the transcript
-- There is no true language auto-detection: "Auto" simply leaves `lang` unset so the browser falls back to the document/UA language
+- There is no official list of supported languages. The spec defines none and no browser publishes one, so the language dropdown cannot be authoritative. Ours is assembled from [Google's Chrome speech demo](https://www.google.com/intl/en/chrome/demos/speech.html) and the [on-device speech recognition explainer](https://github.com/WebAudio/web-speech-api/blob/main/explainers/on-device-speech-recognition.md). So some entries will not work in every browser. When that happens you will see a `language-not-supported` error in the event log
+- There is no language auto-detection: the "Unspecified" option simply leaves `recognition.lang` unset so the browser falls back to the document/UA language, which the option label spells out
 - In cloud mode (the Chrome/Edge default) audio is sent to a remote service for transcription
 
 ## Resources & Links

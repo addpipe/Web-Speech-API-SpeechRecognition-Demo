@@ -117,7 +117,8 @@
           <div class="field">
             <label for="languageSelect">Recognition language</label>
             <select name="languageSelect" id="languageSelect">
-              <option value="auto">Auto (browser default)</option>
+              <!-- Label is completed at runtime with the tag the browser actually falls back to. -->
+              <option value="unspecified">Unspecified — defaults to the document language</option>
               <option value="af-ZA">Afrikaans</option>
               <option value="am-ET">አማርኛ</option>
               <option value="az-AZ">Azərbaycanca</option>
@@ -358,6 +359,25 @@
         <ul>
           <li>Firefox does not support <code>SpeechRecognition</code> yet</li>
           <li>
+            There is no official list of supported languages. The specification does not define one
+            and no browser publishes one, so the language dropdown above cannot be authoritative.
+            Ours is assembled from
+            <a
+              href="https://www.google.com/intl/en/chrome/demos/speech.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Google's Chrome speech demo</a
+            >
+            and the
+            <a
+              href="https://github.com/WebAudio/web-speech-api/blob/main/explainers/on-device-speech-recognition.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              >on-device speech recognition explainer</a
+            >. So some entries will not work in every browser. When that happens you will see
+            a <code>language-not-supported</code> error in the log
+          </li>
+          <li>
             Getting it to work offline is gimmicky.
             <a
               href="https://developer.chrome.com/release-notes/139#on-device_web_speech_api"
@@ -365,7 +385,7 @@
               rel="noopener noreferrer"
               >Chrome 139</a
             >
-            allows it and, in our testing, Safari only worked offline with English
+            allows it
           </li>
           <li>It takes a few extra seconds for the API to figure out when a non-English sentence ends</li>
           <li>
