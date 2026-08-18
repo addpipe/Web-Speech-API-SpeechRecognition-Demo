@@ -19,7 +19,7 @@ It uses the following main `SpeechRecognition` properties:
 
 ## Main features
 - Real-time interim and final captions while recording
-- Multi-language captions, with per-phrase timings, confidence scores and n-best alternatives
+- Supports multiple languages, with per-phrase timings, confidence scores, and n-best alternatives
 - Generated `.vtt`, `.srt`, `.json` and `.txt` files with the resulting transcription after a recording stops
 - Subtitle file generated and applied for the video playback
 - Audio-only capture mode, with automatic fallback if the camera is unavailable
