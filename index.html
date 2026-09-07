@@ -400,6 +400,12 @@
           <li>
             In cloud mode (Chrome/Edge default) audio is sent to a remote service for transcription
           </li>
+          <li>
+            <code>SpeechRecognition.start(audioTrack)</code> — the way to point recognition at a
+            specific microphone instead of the OS default input. It has limited browser support.
+            Where it is missing, the extra argument is silently ignored and recognition falls back
+            to the OS default input regardless of the device picker above
+          </li>
         </ul>
 
         <h2>Links</h2>

@@ -2,12 +2,13 @@
 
 This [Web Speech API Speech Recognition Demo](https://addpipe.com/tech-demos/web-speech-api-demo/) uses `getUserMedia()` and the Web Speech API's `SpeechRecognition` interface. 
 
-It uses the following main `SpeechRecognition` properties: 
+It uses the following main `SpeechRecognition` properties and methods: 
 - `continuous`
 - `interimResults` 
 - `lang`
 - `maxAlternatives`
 - `processLocally` (where supported)
+- `start(audioTrack)` (where supported) - binds recognition to the microphone chosen in the device picker instead of the OS default input
 
 ## How to use
 1. Grant microphone permissions (and camera, unless you switch to audio-only capture).
@@ -52,6 +53,7 @@ clipboard, which makes it useful when reporting a browser bug.
 - There is no official list of supported languages. The spec defines none and no browser publishes one, so the language dropdown cannot be authoritative. Ours is assembled from [Google's Chrome speech demo](https://www.google.com/intl/en/chrome/demos/speech.html) and the [on-device speech recognition explainer](https://github.com/WebAudio/web-speech-api/blob/main/explainers/on-device-speech-recognition.md). So some entries will not work in every browser. When that happens you will see a `language-not-supported` error in the event log
 - There is no language auto-detection: the "Unspecified" option simply leaves `recognition.lang` unset so the browser falls back to the document/UA language, which the option label spells out
 - In cloud mode (the Chrome/Edge default) audio is sent to a remote service for transcription
+- `SpeechRecognition.start(audioTrack)` — the way to point recognition at a specific microphone instead of the OS default input — has limited browser support. Where it is missing, the extra argument is silently ignored and recognition falls back to the OS default input regardless of the device picker above
 
 ## Resources & Links
 - [In-depth article](https://blog.addpipe.com/a-deep-dive-into-the-web-speech-api/)
