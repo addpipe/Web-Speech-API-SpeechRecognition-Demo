@@ -821,6 +821,23 @@ function createRecognition() {
   return rec;
 }
 
+/**
+ * Without an explicit audioTrack, SpeechRecognition.start() listens to whatever the OS
+ * calls the default microphone — not the device chosen in the picker. Recording already
+ * uses `stream`, which was opened against that exact device, so hand recognition the same
+ * track instead of letting it silently pick its own.
+ */
+function selectedAudioTrack() {
+  const track = stream && stream.getAudioTracks()[0];
+  if (!track) return null;
+  // start(track) throws InvalidStateError for anything that isn't a live audio track.
+  if (track.kind !== "audio" || track.readyState !== "live") {
+    log("warn", `Selected microphone track is not usable (${track.kind}, ${track.readyState}) — falling back to the OS default input`);
+    return null;
+  }
+  return track;
+}
+
 function startRecognition() {
   if (!SpeechRecognitionCtor) {
     log("error", "SpeechRecognition is not available in this browser — recording audio/video only");
@@ -839,11 +856,31 @@ function startRecognition() {
 
 function safeStartRecognition(reason) {
   if (!recognition || recognitionRunning) return;
+  const track = selectedAudioTrack();
   try {
-    recognition.start();
-    log("debug", `SpeechRecognition.start() called (${reason})`);
+    if (track) {
+      recognition.start(track);
+      log("debug", `SpeechRecognition.start() called with selected microphone (${reason})`, track.label || "(unlabelled)");
+    } else {
+      // Browsers without the audioTrack parameter (most of them, today) simply ignore the
+      // extra argument, so this only really triggers when there is no usable track at all.
+      recognition.start();
+      log("debug", `SpeechRecognition.start() called with the OS default microphone (${reason})`);
+    }
   } catch (error) {
-    // InvalidStateError means it is already running — anything else is real.
+    // InvalidStateError here means one of two things: recognition was already running
+    // (harmless — start() is a no-op then), or the track went bad between the check above
+    // and this call (device unplugged mid-call). Tell them apart by re-checking the track.
+    if (error && error.name === "InvalidStateError" && (!track || track.readyState !== "live")) {
+      log("warn", "Microphone track became unavailable while starting recognition — falling back to the OS default input", error);
+      try {
+        recognition.start();
+        return;
+      } catch (fallbackError) {
+        log("error", `SpeechRecognition.start() failed even without a track (${reason})`, fallbackError);
+        return;
+      }
+    }
     if (error && error.name === "InvalidStateError") {
       log("debug", "start() ignored: recognition already running");
       recognitionRunning = true;
